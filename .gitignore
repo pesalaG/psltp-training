@@ -7,3 +7,10 @@ day2-train/session-02/__pycache__
 # global ignore of python build files
 **/__pycache__/
 *.py[cod] 
+
+
+#node modules
+/node_modules
+package-lock.json
+package.json
+tsconfig.json
