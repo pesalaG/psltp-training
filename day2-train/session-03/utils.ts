@@ -3,8 +3,6 @@
  * Example: 1500000 -> "Rs. 1,500,000.00"
  */
 export function formatCurrency(amount: number): string {
-  // Edge case: Handle non-numeric or negative input if necessary
-  // Even though 'amount' is typed as number, logical checks are good practice
   const absoluteAmount = Math.abs(amount);
   const sign = amount < 0 ? "-" : "";
 
@@ -22,15 +20,7 @@ export function formatCurrency(amount: number): string {
  * Example: CDS-1234-5678 -> true, CDS-ABCD-1234 -> false
  */
 export function validateCDSNumber(cds: string): boolean {
-  /**
-   * Regex breakdown:
-   * ^          : Start of string
-   * CDS-       : Must start with "CDS-"
-   * \d{4}      : Exactly 4 digits
-   * -          : A hyphen
-   * \d{4}      : Exactly 4 digits
-   * $          : End of string
-   */
+
   const cdsRegex = /^CDS-\d{4}-\d{4}$/;
   
   return cdsRegex.test(cds);
