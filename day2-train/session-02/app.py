@@ -40,5 +40,3 @@ async def echo(request: EchoRequest):
         "echo": request.message, 
         "timestamp": datetime.now().isoformat()
     }
-
-# Run with: uvicorn app:app --reload
