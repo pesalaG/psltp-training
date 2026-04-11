@@ -3,7 +3,7 @@ import React from 'react';
 interface StockCardProps {
   symbol: string;
   price: number;
-  change: number; // percentage change
+  change: number; // percentage 
 }
  
 /**
