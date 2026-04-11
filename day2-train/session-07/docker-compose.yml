@@ -1,0 +1,62 @@
+# TODO: docker-compose.yml with:
+# - FastAPI app service
+# - PostgreSQL database service
+# - Volume for postgres data
+# - Network for service communication
+#
+# FastAPI service:
+#   - Build from ./Dockerfile
+#   - Expose port 8000
+#   - Environment: DATABASE_URL, LOG_LEVEL
+#
+# Postgres service:
+#   - image: postgres:16
+#   - Port 5432
+#   - Volume for persistence
+
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: psltp_db
+    restart: always
+    environment:
+      POSTGRES_USER: psltp_user
+      POSTGRES_PASSWORD: psltp_password
+      POSTGRES_DB: psltp_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - psltp_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U psltp_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: psltp_backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+asyncpg://psltp_user:psltp_password@db:5432/psltp_db
+      LOG_LEVEL: DEBUG
+    ports:
+      - "8000:8000"
+    networks:
+      - psltp_network
+    restart: always
+
+volumes:
+  postgres_data:
+
+networks:
+  psltp_network:
+    driver: bridge
